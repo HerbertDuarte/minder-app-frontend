@@ -2,11 +2,12 @@ import FormLogin from "@/components/Form/FormLogin";
 
 export default function Login() {
   return (
-    <main className="p-3 min-h-flex flex justify-center items-center">
-      <div className="w-full max-w-[600px] p-3 border-2 border-zinc-300 rounded-lg">
-        <h1 className="text-center text-2xl font-medium">Login</h1>
+    <main className="p-6 md:p-12 min-h-flex flex justify-between items-start">
+      <h1 className="text-zinc-500 font-medium py-8">minder app</h1>
+      <div className="flex justify-center items-center w-full">
         <FormLogin />
       </div>
+      <div className="bg-transparent" />
     </main>
   );
 }

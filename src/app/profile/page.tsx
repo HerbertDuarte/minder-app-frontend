@@ -3,11 +3,7 @@ import Button from "@/components/assets/Button";
 import Dialog from "@/components/assets/Dialog";
 import { useAuth } from "@/contexts/authContext/AuthContext";
 import { useAxios } from "@/hooks/useAxios";
-import {
-  User2Icon,
-  LogOutIcon,
-  Edit2Icon,
-} from "lucide-react";
+import { User2Icon, LogOutIcon, Edit2Icon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
@@ -21,9 +17,8 @@ export default function Profile() {
   useEffect(() => {
     setAuthLoading(true);
     async function updateDataUser() {
-      const { data } = await api.get(`/usuarios/${user.id}`);
+      const { data } = await api.get(`/user/${user.id}`);
       setUser(data);
-      console.log("updateDataUser");
     }
     try {
       updateDataUser();
@@ -47,16 +42,19 @@ export default function Profile() {
         </div>
       </Dialog>
       <div className="flex justify-between w-full flex-row">
-        <div onClick={() => router.push("/profile/edit")} className="flex justify-center items-start gap-2">
-          <div className="bg-zinc-400 md:p-4 p-3 flex justify-center items-center rounded-full">
+        <div
+          onClick={() => router.push("/profile/edit")}
+          className="flex justify-center items-start gap-2 text-zinc-400"
+        >
+          <div className="bg-zinc-900 md:p-4 p-3 flex justify-center items-center rounded-full">
             <User2Icon size={45} />
           </div>
           <div className="py-2">
             <h1 className="md:text-2xl text-xl font-bold flex items-center gap-2">
-              <span className="truncate max-w-[10ch] xs:max-w-[20ch] sm:max-w-30ch">{user.nome}</span>
-              <span
-                className="cursor-pointer"
-              >
+              <span className="truncate max-w-[10ch] xs:max-w-[20ch] sm:max-w-30ch">
+                {user.name}
+              </span>
+              <span className="cursor-pointer">
                 <Edit2Icon size={20} strokeWidth={3} />
               </span>
             </h1>

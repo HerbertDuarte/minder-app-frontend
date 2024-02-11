@@ -13,11 +13,14 @@ export const metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="pt-br">
-      <body className={inter.className + " overflow-x-hidden"}>
+      <body
+        className={
+          inter.className +
+          " overflow-x-hidden bg-black text-zinc-200 antialiased"
+        }
+      >
         <AuthProvider>
-          <RouterProvider>
-            {children}
-          </RouterProvider>
+          <RouterProvider>{children}</RouterProvider>
         </AuthProvider>
       </body>
     </html>

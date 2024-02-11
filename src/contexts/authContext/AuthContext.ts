@@ -1,7 +1,7 @@
 import {Dispatch, createContext, useContext} from 'react'
 
 interface AuthContextProps {
-  login: (data : {username: string, password: string}) => Promise<unknown | any>
+  login: (data : {email: string, password: string}) => Promise<unknown | any>
   logout: () => void
   user: String | any
   setUser: (user: String | any) => void

@@ -3,20 +3,21 @@ import { useEffect, useRef } from "react";
 interface Props {
   model: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
   children: React.ReactNode;
+  persistent?: boolean;
 }
 
-export default function Dialog({ model, children } : Props) {
+export default function Dialog({ model, children, persistent }: Props) {
   const [value, setValue] = model;
   const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    function handleKeyDown(event : any) {
-      if (event.key === "Escape") {
+    function handleKeyDown(event: any) {
+      if (event.key === "Escape" && !persistent) {
         setValue(false);
       }
     }
 
-    if (value) {
+    if (value && !persistent) {
       document.addEventListener("keydown", handleKeyDown);
     } else {
       document.removeEventListener("keydown", handleKeyDown);
@@ -25,16 +26,16 @@ export default function Dialog({ model, children } : Props) {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [setValue, value]);
+  }, [setValue, value, persistent]);
 
   useEffect(() => {
-    function handleClickOutside(event : any) {
-      if (contentRef.current && !contentRef.current.contains(event.target)) {
+    function handleClickOutside(event: any) {
+      if (contentRef.current && !contentRef.current.contains(event.target) && !persistent) {
         setValue(false);
       }
     }
 
-    if (value) {
+    if (value && !persistent) {
       document.addEventListener("mousedown", handleClickOutside);
     } else {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -43,24 +44,26 @@ export default function Dialog({ model, children } : Props) {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [contentRef, setValue, value]);
+  }, [contentRef, setValue, value, persistent]);
   return (
     <div
-      className={`transition-colors z-40 ${value ? "bg-black/50 pointer-events-auto" : "pointer-events-none"} w-screen h-screen fixed flex justify-center items-center top-0 left-0 right-0 bottom-0 `}
+      className={`transition-colors z-40 ${
+        value ? "bg-black/50 pointer-events-auto" : "pointer-events-none"
+      } w-screen h-screen fixed flex justify-center items-center top-0 left-0 right-0 bottom-0 `}
     >
       <div
         ref={contentRef}
         className={`relative transition-all duration-200 scale-0 overflow-hidden ${
           value && "scale-100"
-        } max-w-[90vw] max-h-[85%] bg-white text-zinc-900 m-4 rounded-md`}
+        } max-w-[90vw] max-h-[85%] bg-zinc-900 text-zinc-400 m-4 rounded-md`}
       >
-        <header className="bg-zinc-200 w-full h-7">
+        <header className="bg-zinc-800 w-full h-7">
           <button
             className="bg-red-400 hover:bg-red-500 p-2.5 rounded-full absolute right-1 top-1"
             onClick={() => setValue(false)}
           ></button>
         </header>
-        <div className="p-3">{children}</div>
+        <div className="p-6">{children}</div>
       </div>
     </div>
   );

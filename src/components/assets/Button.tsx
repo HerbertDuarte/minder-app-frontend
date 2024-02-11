@@ -27,22 +27,22 @@ export default function Button({
   if (flat) {
     switch (theme) {
       case "primary":
-        classButton = "bg-primary-light text-primary";
+        classButton = "bg-primary-light/70 text-primary";
         break;
       case "secondary":
-        classButton = "bg-blue-100 text-blue-900";
+        classButton = "bg-blue-100/70 text-blue-900";
         break;
       case "danger":
-        classButton = "bg-red-100 text-red-950";
+        classButton = "bg-red-100/70 text-red-950";
         break;
       case "success":
-        classButton = "bg-green-100 text-green-950";
+        classButton = "bg-green-100/70 text-green-950";
         break;
       case "warning":
-        classButton = "bg-yellow-100 text-yellow-950";
+        classButton = "bg-yellow-100/70 text-yellow-950";
         break;
       default:
-        classButton = "bg-zinc-200";
+        classButton = "bg-zinc-800/70";
         break;
     }
   } else {
@@ -63,7 +63,7 @@ export default function Button({
         classButton = "bg-yellow-200 text-yellow-900";
         break;
       default:
-        classButton = "bg-zinc-200";
+        classButton = "bg-zinc-800";
         break;
     }
   }

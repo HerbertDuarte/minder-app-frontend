@@ -6,7 +6,7 @@ interface ButtonProps {
   flat?: boolean;
   dense?: boolean;
   children: React.ReactNode;
-  submit? : boolean
+  submit?: boolean;
 }
 export default function FormButton({
   theme,
@@ -14,29 +14,29 @@ export default function FormButton({
   flat,
   dense,
   children,
-  submit = false
+  submit = false,
 }: ButtonProps) {
   let classButton;
 
   if (flat) {
     switch (theme) {
       case "primary":
-        classButton = "bg-primary-light text-primary";
+        classButton = "bg-primary-light/90 text-primary";
         break;
       case "secondary":
-        classButton = "bg-blue-100 text-blue-900";
+        classButton = "bg-blue-100/90 text-blue-900";
         break;
       case "danger":
-        classButton = "bg-red-100 text-red-950";
+        classButton = "bg-red-100/90 text-red-950";
         break;
       case "success":
-        classButton = "bg-green-100 text-green-950";
+        classButton = "bg-green-100/90 text-green-950";
         break;
       case "warning":
-        classButton = "bg-yellow-100 text-yellow-950";
+        classButton = "bg-yellow-100/90 text-yellow-950";
         break;
       default:
-        classButton = "bg-zinc-200";
+        classButton = "bg-zinc-800/90";
         break;
     }
   } else {
@@ -57,7 +57,7 @@ export default function FormButton({
         classButton = "bg-yellow-200 text-yellow-900";
         break;
       default:
-        classButton = "bg-zinc-200";
+        classButton = "bg-zinc-800";
         break;
     }
   }
@@ -67,19 +67,18 @@ export default function FormButton({
     classButton += " py-2 px-3";
   }
 
-  return submit ?(
-    
+  return submit ? (
     <input
       value={String(children)}
       type="submit"
       className={`${classButton} rounded cursor-pointer hover:opacity-90 transition-opacity`}
     />
-  ) :(
+  ) : (
     <input
       value={String(children)}
       type="button"
       className={`${classButton} rounded cursor-pointer hover:opacity-90 transition-opacity`}
-      onClick={action || (() => {}) }
+      onClick={action || (() => {})}
     />
   );
 }

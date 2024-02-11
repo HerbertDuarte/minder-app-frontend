@@ -19,20 +19,27 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [_, setErrorNotify] = modelError;
   const [error, setError] = useState<string>("");
   const exitNotificationModel = useState<boolean>(false);
-  const [exitNotificationMessage, setExitNotificationMessage] = useState<string>("");
+  const [exitNotificationMessage, setExitNotificationMessage] =
+    useState<string>("");
 
   /* LOGIN */
-  async function login(data: { username: string; password: string }) {
+  async function login(data: { email: string; password: string }) {
     setErrorNotify(false);
     setAuthLoading(true);
     try {
-      const { username, password } = data;
-      const response = await api.post("/auth/login", { username, password });
-      setDataLogin(response.data);
+      const { email, password } = data;
+      const response = await api.post("/user/auth", { email, password });
+      setUser(response.data.user);
+      setToken(response.data.access_token);
     } catch (error: any) {
-      setError(error.message);
-      setErrorNotify(true);
-      console.error(error);
+      if (error?.response?.status === 401) {
+        setError(error.response.data.message);
+        setErrorNotify(true);
+      } else {
+        setError("Internal server error!");
+        setErrorNotify(true);
+      }
+      console.error(error?.response);
     }
     setAuthLoading(false);
     return;
@@ -43,7 +50,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     setAuthLoading(true);
     setToken("");
     setUser(undefined);
-    
+
     localStorage.removeItem("user");
     localStorage.removeItem("token");
     console.log("logout");
@@ -53,32 +60,21 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     router.push("/");
   }
 
-  async function setDataLogin(data: any) {
-    const id = data.usuarioId;
-    const { data: userData } = await api.get(`/usuarios/${id}`, {
-      headers: {
-        Authorization: `Bearer ${data.access_token}`,
-      },
-    });
-    setToken(data.access_token);
-    setUser(userData);
-  }
-
-  useEffect(()=>{
-    if(user){
+  useEffect(() => {
+    if (user) {
       localStorage.setItem("user", JSON.stringify(user));
-    }else{
+    } else {
       localStorage.removeItem("user");
     }
-  }, [user])
+  }, [user]);
 
-  useEffect(()=>{
-    if(token){
+  useEffect(() => {
+    if (token) {
       localStorage.setItem("token", token);
-    }else{
+    } else {
       localStorage.removeItem("token");
     }
-  }, [token])
+  }, [token]);
   return (
     <AuthContext.Provider
       value={{
@@ -94,9 +90,13 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
       }}
     >
       <Notify model={modelError} theme="danger" text={`${error}!`} />
-      <Notify model={exitNotificationModel} theme="success" text={`${exitNotificationMessage}!`} />
-      
-      {authLoading ? <Loader/>  : children}
+      <Notify
+        model={exitNotificationModel}
+        theme="success"
+        text={`${exitNotificationMessage}!`}
+      />
+
+      {authLoading ? <Loader /> : children}
     </AuthContext.Provider>
   );
 };
