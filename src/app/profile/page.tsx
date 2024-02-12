@@ -27,7 +27,7 @@ export default function Profile() {
   }, []);
 
   return (
-    <main className="justify-start items-start p-3">
+    <main className="justify-between items-start p-3">
       <Dialog model={logoutDialog}>
         <h1>Are you sure you want to leave?</h1>
         <div className="w-full flex justify-center gap-2 pt-2">
@@ -39,32 +39,34 @@ export default function Profile() {
       </Dialog>
       <div className="flex justify-between w-full flex-row">
         <div
-          onClick={() => router.push("/profile/edit")}
-          className="flex justify-center items-start gap-2 text-gray-700"
+          // onClick={() => router.push("/profile/edit")}
+          className="flex flex-col justify-center items-center text-center gap-2 text-gray-700 w-full"
         >
           <div className="bg-gray-200 md:p-4 p-3 flex justify-center items-center rounded-full">
             <User2Icon size={45} />
           </div>
           <div className="py-2">
-            <h1 className="md:text-2xl text-xl font-bold flex items-center gap-2">
+            <h1 className="md:text-2xl text-xl font-bold flex justify-center items-center gap-2">
               <span className="truncate max-w-[10ch] xs:max-w-[20ch] sm:max-w-30ch">
                 {user.name}
               </span>
-              <span className="cursor-pointer">
+              {/* <span className="cursor-pointer">
                 <Edit2Icon size={20} strokeWidth={3} />
-              </span>
+              </span> */}
             </h1>
-            <p className="md:text-lg text-md">{user.email}</p>
+            <p className="md:text-lg text-md text-gray-500">{user.email}</p>
           </div>
         </div>
-        <div>
-          <Button theme="outline" action={() => setLogoutDialog(true)}>
-            <p className="text-gray-700 flex flex-nowrap items-center gap-2 sm:py-0 py-3">
-              <span className="sm:block hidden">Logout</span>
-              <LogOutIcon className="sm:scale-100 scale-125" size={18} />
-            </p>
-          </Button>
-        </div>
+      </div>
+      <div className="flex justify-end gap-2">
+        <Button theme="700" action={() => router.push("/")}>
+          Voltar
+        </Button>
+        <Button theme="outline" action={() => setLogoutDialog(true)}>
+          <p className="text-gray-700 flex flex-nowrap items-center gap-2 sm:py-0 py-3">
+            Sair
+          </p>
+        </Button>
       </div>
     </main>
   );
