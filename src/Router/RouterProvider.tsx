@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/authContext/AuthContext";
 import Login from "@/components/login/page";
 import Layout from "@/components/Layouts/MainLayout";
@@ -11,22 +11,26 @@ export default function RouterProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const { setUser, user, authLoading, setToken } = useAuth();
-  const [loading, setLoading] = React.useState<boolean>(true);
+  const { getUserData, user } = useAuth();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (localStorage.getItem("user")) {
-      const dataUser = JSON.parse(localStorage.getItem("user") as string | any);
-      setUser(dataUser);
-    }
-    if (localStorage.getItem("token")) {
+    async function handle() {
       const dataToken = localStorage.getItem("token") as string | any;
-      setToken(dataToken);
+      const dataUser = await JSON.parse(
+        localStorage.getItem("user") as string | any
+      );
+      if (dataToken && dataUser && dataUser.id) {
+        await getUserData(dataUser.id, dataToken);
+      }
+      setLoading(false)
     }
-    setLoading(false);
-  }, [authLoading, setUser, setToken]);
+    handle();
+  }, []);
 
   return (
-    <>{ loading ? <Loader /> :  user ? <Layout>{children}</Layout> :  <Login />}</>
+    <>
+      {loading ? <Loader /> : user ?<Layout>{children}</Layout> :  <Login /> }
+    </>
   );
 }

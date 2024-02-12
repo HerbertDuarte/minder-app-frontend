@@ -5,13 +5,11 @@ import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { useAuth } from "@/contexts/authContext/AuthContext";
 import { EditIcon } from "lucide-react";
-import Notify from "../assets/Notify";
+import { toast } from "sonner";
 
 export default function FormEditUser() {
   const router = useRouter();
   const { user } = useAuth();
-  const errorNotify = useState(false);
-  const [errorText, setErrorText] = useState("");
   const [form, setForm] = useState({
     name: user.name,
     email: user.email,
@@ -51,26 +49,26 @@ export default function FormEditUser() {
   function validate() {
     const { name, confirmNewPassword, email, newPassword, password } = form;
     if (name === "") {
-      setErrorText("Please, fill the field name!");
-      errorNotify[1](true);
+      toast.error("Please, fill the field name!");
       return false;
     }
 
     if (email === "") {
-      setErrorText("Please, fill the field email!");
-      errorNotify[1](true);
+      toast.error("Please, fill the field email!");
       return false;
     }
 
     if (password === "") {
-      setErrorText("Please, fill the field password!");
-      errorNotify[1](true);
+      toast.error("Please, fill the field password!");
       return false;
     }
 
-    if (password.length < 6 || newPassword.length < 6 || confirmNewPassword.length < 6) {
-      setErrorText("Password must be at least 6 characters!");
-      errorNotify[1](true);
+    if (
+      password.length < 6 ||
+      newPassword.length < 6 ||
+      confirmNewPassword.length < 6
+    ) {
+      toast.error("Password must be at least 6 characters!");
       return false;
     }
 
@@ -78,8 +76,7 @@ export default function FormEditUser() {
       (newPassword !== "" || confirmNewPassword !== "") &&
       confirmNewPassword !== newPassword
     ) {
-      setErrorText("Please, correctly confirm your new password!");
-      errorNotify[1](true);
+      toast.error("Please, correctly confirm your new password!");
       return false;
     }
 
@@ -87,20 +84,19 @@ export default function FormEditUser() {
   }
   return (
     <>
-      <Notify theme="danger" text={errorText} model={errorNotify} />
       <form
         onSubmit={handleUpdateUser}
-        className="max-w-xl w-full flex flex-col gap-1 p-6 m-3 bg-zinc-900 rounded-xl"
+        className="max-w-xl w-full flex flex-col gap-1 p-6 m-3 bg-gray-100 rounded-xl shadow-lg"
       >
-        <h1 className="text-xl font-medium text-zinc-400 pb-6 flex gap-2">
+        <h1 className="text-xl font-medium text-gray-800 pb-6 flex gap-2">
           <EditIcon /> Edit your profile
         </h1>
         <label className="w-full">
-          <p className="pl-1 text-zinc-500">
+          <p className="pl-1 text-gray-700">
             name <span className="text-red-800">*</span>
           </p>
           <input
-            className="bg-zinc-800 outline-none p-2 rounded w-full"
+            className="hover:bg-gray-200 active:bg-gray-200 focus:bg-gray-200 focus-visible:bg-gray-200 bg-gray-200 text-zinc-600 p-2 w-full rounded outline-none"
             type="text"
             value={form.name}
             onChange={(e) =>
@@ -109,11 +105,11 @@ export default function FormEditUser() {
           />
         </label>
         <label className="w-full">
-          <p className="pl-1 text-zinc-500">
+          <p className="pl-1 text-gray-700">
             email <span className="text-red-800">*</span>
           </p>
           <input
-            className="bg-zinc-800 outline-none p-2 rounded w-full"
+            className="hover:bg-gray-200 active:bg-gray-200 focus:bg-gray-200 focus-visible:bg-gray-200 bg-gray-200 text-zinc-600 p-2 w-full rounded outline-none"
             type="text"
             value={form.email}
             onChange={(e) =>
@@ -122,11 +118,11 @@ export default function FormEditUser() {
           />
         </label>
         <label className="w-full">
-          <p className="pl-1 text-zinc-500">
+          <p className="pl-1 text-gray-700">
             password <span className="text-red-800">*</span>
           </p>
           <input
-            className="bg-zinc-800 outline-none p-2 rounded w-full"
+            className="hover:bg-gray-200 active:bg-gray-200 focus:bg-gray-200 focus-visible:bg-gray-200 bg-gray-200 text-zinc-600 p-2 w-full rounded outline-none"
             type="password"
             value={form.password}
             onChange={(e) =>
@@ -135,11 +131,11 @@ export default function FormEditUser() {
           />
         </label>
         <label className="w-full">
-          <p className="pl-1 text-zinc-500">
-            new password <span className="text-zinc-600">(optional)</span>
+          <p className="pl-1 text-gray-700">
+            new password <span className="text-gray-700">(optional)</span>
           </p>
           <input
-            className="bg-zinc-800 outline-none p-2 rounded w-full"
+            className="hover:bg-gray-200 active:bg-gray-200 focus:bg-gray-200 focus-visible:bg-gray-200 bg-gray-200 text-zinc-600 p-2 w-full rounded outline-none"
             type="password"
             value={form.newPassword}
             onChange={(e) =>
@@ -148,12 +144,12 @@ export default function FormEditUser() {
           />
         </label>
         <label className="w-full">
-          <p className="pl-1 text-zinc-500">
+          <p className="pl-1 text-gray-700">
             confirm new password{" "}
-            <span className="text-zinc-600">(optional)</span>
+            <span className="text-gray-700">(optional)</span>
           </p>
           <input
-            className="bg-zinc-800 outline-none p-2 rounded w-full"
+            className="hover:bg-gray-200 active:bg-gray-200 focus:bg-gray-200 focus-visible:bg-gray-200 bg-gray-200 text-zinc-600 p-2 w-full rounded outline-none"
             type="password"
             value={form.confirmNewPassword}
             onChange={(e) =>

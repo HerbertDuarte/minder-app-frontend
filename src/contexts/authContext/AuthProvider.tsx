@@ -1,72 +1,75 @@
 "use client";
 
-import { ReactNode, useEffect, useState } from "react";
+import { Dispatch, ReactNode, useEffect, useState } from "react";
 import { useAxios } from "@/hooks/useAxios";
-import { AuthContext } from "./AuthContext";
-import Notify from "@/components/assets/Notify";
+import { AuthContext, INote } from "./AuthContext";
 import { useRouter } from "next/navigation";
-import Loader from "@/components/assets/Loader";
+import { toast } from "sonner";
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const api = useAxios();
+  const { api, updateToken } = useAxios();
 
   const [user, setUser] = useState<any>();
   const [token, setToken] = useState<string>("");
-  const [authLoading, setAuthLoading] = useState<boolean>(false);
+  const [notes, setNotes] = useState<INote[]>([]);
   const router = useRouter();
   /* MODAIS */
   const modelError = useState<boolean>(false);
   const [_, setErrorNotify] = modelError;
-  const [error, setError] = useState<string>("");
-  const exitNotificationModel = useState<boolean>(false);
-  const [exitNotificationMessage, setExitNotificationMessage] =
-    useState<string>("");
+  useState<string>("");
 
   /* LOGIN */
   async function login(data: { email: string; password: string }) {
     setErrorNotify(false);
-    setAuthLoading(true);
+
     try {
       const { email, password } = data;
-      const response = await api.post("/user/auth", { email, password });
+      const response = await api.post("/user/auth", {
+        email,
+        password,
+      });
       setUser(response.data.user);
       setToken(response.data.access_token);
+      const apiWithAccess = updateToken(response.data.access_token);
+      const { data: notesData } = await apiWithAccess.get("/note");
+      setNotes(notesData);
     } catch (error: any) {
       if (error?.response?.status === 401) {
-        setError(error.response.data.message);
-        setErrorNotify(true);
+        toast.error(error.response.data.message);
       } else {
-        setError("Internal server error!");
-        setErrorNotify(true);
+        toast.error("Internal server error");
+        console.log(error);
       }
       console.error(error?.response);
     }
-    setAuthLoading(false);
     return;
   }
 
   /* LOGOUT */
   function logout() {
-    setAuthLoading(true);
     setToken("");
     setUser(undefined);
 
     localStorage.removeItem("user");
     localStorage.removeItem("token");
-    console.log("logout");
-    exitNotificationModel[1](true);
-    setExitNotificationMessage("Session closed successfully");
-    setAuthLoading(false);
+    toast.success("Session closed successfully");
     router.push("/");
   }
 
-  useEffect(() => {
-    if (user) {
-      localStorage.setItem("user", JSON.stringify(user));
-    } else {
-      localStorage.removeItem("user");
+  async function getUserData(id: string, token: string) {
+    try {
+      const api = updateToken(token);
+      const { data: user } = await api.get("/user/" + id);
+      const { data: notes } = await api.get("/note");
+      setUser(user)
+      setToken(token);
+      setNotes(notes);
+      return true
+    } catch (error) {
+      logout()
+      return false
     }
-  }, [user]);
+  }
 
   useEffect(() => {
     if (token) {
@@ -74,7 +77,15 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     } else {
       localStorage.removeItem("token");
     }
-  }, [token]);
+  }, [token, setToken]);
+
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem("user", JSON.stringify(user));
+    } else {
+      localStorage.removeItem("user");
+    }
+  }, [user, setUser]);
   return (
     <AuthContext.Provider
       value={{
@@ -84,19 +95,12 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUser,
         token,
         setToken,
-        error,
-        authLoading,
-        setAuthLoading,
+        notes,
+        setNotes,
+        getUserData,
       }}
     >
-      <Notify model={modelError} theme="danger" text={`${error}!`} />
-      <Notify
-        model={exitNotificationModel}
-        theme="success"
-        text={`${exitNotificationMessage}!`}
-      />
-
-      {authLoading ? <Loader /> : children}
+      {children}
     </AuthContext.Provider>
   );
 };

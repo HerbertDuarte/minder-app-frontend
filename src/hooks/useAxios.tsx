@@ -1,21 +1,40 @@
 import { useAuth } from "@/contexts/authContext/AuthContext";
 import axios from "axios";
 
-export const useAxios = () => {
+export function useAxios(prevToken?: string) {
+  let api;
   const { token } = useAuth();
-  if(token){
-    const api = axios.create({
+
+  if (prevToken) {
+    api = axios.create({
+      baseURL: process.env.NEXT_PUBLIC_API_URL,
+      headers: {
+        Authorization: `Bearer ${prevToken}`,
+      },
+    });
+  } else if (token) {
+    api = axios.create({
+      baseURL: process.env.NEXT_PUBLIC_API_URL,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  } else {
+    api = axios.create({
+      baseURL: process.env.NEXT_PUBLIC_API_URL,
+    });
+  }
+
+  function updateToken(token : string) {
+    api = axios.create({
       baseURL: process.env.NEXT_PUBLIC_API_URL,
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
 
-    return api;
-  }else{
-    const api = axios.create({
-      baseURL: process.env.NEXT_PUBLIC_API_URL
-    });
     return api
   }
-};
+
+  return {updateToken, api}
+}

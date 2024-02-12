@@ -1,7 +1,14 @@
 import React from "react";
 
 interface ButtonProps {
-  theme?: "primary" | "secondary" | "danger" | "success" | "warning";
+  theme?:
+    | "primary"
+    | "secondary"
+    | "danger"
+    | "success"
+    | "warning"
+    | "900"
+    | "700";
   action?: () => void;
   flat?: boolean;
   dense?: boolean;
@@ -36,13 +43,13 @@ export default function FormButton({
         classButton = "bg-yellow-100/90 text-yellow-950";
         break;
       default:
-        classButton = "bg-zinc-800/90";
+        classButton = "bg-gray-200/90 text-gray-600";
         break;
     }
   } else {
     switch (theme) {
       case "primary":
-        classButton = "bg-zinc-600 text-white";
+        classButton = "bg-gray-700 text-white";
         break;
       case "secondary":
         classButton = "bg-blue-500 text-white";
@@ -56,8 +63,16 @@ export default function FormButton({
       case "warning":
         classButton = "bg-yellow-200 text-yellow-900";
         break;
+
+      case "900":
+        classButton = "bg-gray-900 text-gray-300";
+        break;
+      case "700":
+        classButton = "bg-gray-700 text-gray-300";
+        break;
       default:
-        classButton = "bg-zinc-800";
+        classButton =
+          "bg-gray-200 border p-2 hover:bg-gray-300 hover:text-800 text-gray-500";
         break;
     }
   }

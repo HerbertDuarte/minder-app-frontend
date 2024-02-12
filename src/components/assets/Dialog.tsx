@@ -4,12 +4,39 @@ interface Props {
   model: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
   children: React.ReactNode;
   persistent?: boolean;
+  maxWidth?: "md" | "lg" | "xl" | "2xl" | "3xl";
 }
 
-export default function Dialog({ model, children, persistent }: Props) {
+export default function Dialog({
+  model,
+  children,
+  persistent,
+  maxWidth,
+}: Props) {
   const [value, setValue] = model;
   const contentRef = useRef<HTMLDivElement>(null);
 
+  let maxWidthClass;
+
+  switch (maxWidth) {
+    case "md":
+      maxWidthClass = " max-w-[400px]";
+      break;
+    case "lg":
+      maxWidthClass = " max-w-[640px]";
+      break;
+    case "xl":
+      maxWidthClass = " max-w-[764px]";
+      break;
+    case "2xl":
+      maxWidthClass = " max-w-[900px]";
+      break;
+    case "3xl":
+      maxWidthClass = " max-w-[1280px]";
+      break;
+    default:
+      break;
+  }
   useEffect(() => {
     function handleKeyDown(event: any) {
       if (event.key === "Escape" && !persistent) {
@@ -30,7 +57,11 @@ export default function Dialog({ model, children, persistent }: Props) {
 
   useEffect(() => {
     function handleClickOutside(event: any) {
-      if (contentRef.current && !contentRef.current.contains(event.target) && !persistent) {
+      if (
+        contentRef.current &&
+        !contentRef.current.contains(event.target) &&
+        !persistent
+      ) {
         setValue(false);
       }
     }
@@ -45,6 +76,7 @@ export default function Dialog({ model, children, persistent }: Props) {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [contentRef, setValue, value, persistent]);
+
   return (
     <div
       className={`transition-colors z-40 ${
@@ -55,15 +87,17 @@ export default function Dialog({ model, children, persistent }: Props) {
         ref={contentRef}
         className={`relative transition-all duration-200 scale-0 overflow-hidden ${
           value && "scale-100"
-        } max-w-[90vw] max-h-[85%] bg-zinc-900 text-zinc-400 m-4 rounded-md`}
+        } ${
+          maxWidth && `w-full ${maxWidthClass}`
+        } max-h-[85%] bg-gray-100 text-gray-800 m-4 rounded-md`}
       >
-        <header className="bg-zinc-800 w-full h-7">
+        <header className="bg-gray-200 w-full h-7">
           <button
             className="bg-red-400 hover:bg-red-500 p-2.5 rounded-full absolute right-1 top-1"
             onClick={() => setValue(false)}
           ></button>
         </header>
-        <div className="p-6">{children}</div>
+        <div className="flex-1 p-6">{children}</div>
       </div>
     </div>
   );

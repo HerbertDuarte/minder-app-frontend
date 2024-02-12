@@ -8,14 +8,13 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 export default function Profile() {
-  const { logout, user, setUser, setAuthLoading, token } = useAuth();
-  const api = useAxios();
+  const { logout, user, setUser, token } = useAuth();
+  const { api } = useAxios();
   const logoutDialog = useState<boolean>(false);
   const router = useRouter();
   const [_, setLogoutDialog] = logoutDialog;
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    setAuthLoading(true);
     async function updateDataUser() {
       const { data } = await api.get(`/user/${user.id}`);
       setUser(data);
@@ -25,7 +24,6 @@ export default function Profile() {
     } catch (error) {
       console.log(error);
     }
-    setAuthLoading(false);
   }, []);
 
   return (
@@ -33,20 +31,18 @@ export default function Profile() {
       <Dialog model={logoutDialog}>
         <h1>Are you sure you want to leave?</h1>
         <div className="w-full flex justify-center gap-2 pt-2">
-          <Button action={() => setLogoutDialog(false)} theme="warning">
+          <Button action={() => setLogoutDialog(false)} theme="700">
             Cancel
           </Button>
-          <Button action={() => logout()} theme="danger">
-            Confirm
-          </Button>
+          <Button action={() => logout()}>Confirm</Button>
         </div>
       </Dialog>
       <div className="flex justify-between w-full flex-row">
         <div
           onClick={() => router.push("/profile/edit")}
-          className="flex justify-center items-start gap-2 text-zinc-400"
+          className="flex justify-center items-start gap-2 text-gray-700"
         >
-          <div className="bg-zinc-900 md:p-4 p-3 flex justify-center items-center rounded-full">
+          <div className="bg-gray-200 md:p-4 p-3 flex justify-center items-center rounded-full">
             <User2Icon size={45} />
           </div>
           <div className="py-2">
@@ -62,8 +58,8 @@ export default function Profile() {
           </div>
         </div>
         <div>
-          <Button action={() => setLogoutDialog(true)}>
-            <p className="flex flex-nowrap items-center gap-2 sm:py-0 py-3">
+          <Button theme="outline" action={() => setLogoutDialog(true)}>
+            <p className="text-gray-700 flex flex-nowrap items-center gap-2 sm:py-0 py-3">
               <span className="sm:block hidden">Logout</span>
               <LogOutIcon className="sm:scale-100 scale-125" size={18} />
             </p>
