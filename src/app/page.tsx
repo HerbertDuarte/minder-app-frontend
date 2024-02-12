@@ -47,7 +47,7 @@ export default function App() {
             />
           </label>
 
-          <FormButton submit>enviar</FormButton>
+          <FormButton submit>Salvar</FormButton>
         </form>
       </Dialog>
       <main className="px-12 py-8 grid grid-cols-3 auto-rows-[250px] w-full gap-5">

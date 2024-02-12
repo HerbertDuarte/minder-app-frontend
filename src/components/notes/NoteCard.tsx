@@ -16,9 +16,10 @@ export function NoteCard({ data }: IProps) {
   const { notes, setNotes } = useAuth();
   const [openNote, setOpenNote] = useState(false);
   const [edtiting, setEditing] = useState(false);
-  const [content, setContent] = useState(data.content);
+  const [content, setContent] = useState("");
 
   function openModal() {
+    setContent(data.content);
     setEditing(false);
     setOpenNote(true);
   }
