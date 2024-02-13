@@ -13,6 +13,7 @@ interface ButtonProps {
     | "700";
   action?: () => void;
   dense?: boolean;
+  submit?: boolean;
   children: React.ReactNode;
 }
 
@@ -21,6 +22,7 @@ export default function Button({
   action,
   dense,
   children,
+  submit = false,
 }: ButtonProps) {
   let classButton;
 
@@ -75,6 +77,7 @@ export default function Button({
 
   return (
     <button
+      type={submit ? "submit" : "button"}
       className={`${classButton} rounded hover:opacity-90 transition-opacity`}
       onClick={handleClick || (() => {})}
     >

@@ -37,7 +37,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (error?.response?.status === 401) {
         toast.error(error.response.data.message);
       } else {
-        toast.error("Internal server error");
+        toast.error("Ops! Houve um erro inesperado, tente novamente mais tarde!");
         console.log(error);
       }
       console.error(error?.response);
@@ -52,7 +52,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     localStorage.removeItem("user");
     localStorage.removeItem("token");
-    toast.success("Session closed successfully");
+    toast.success("Seção finalizada com sucesso");
     router.push("/");
   }
 

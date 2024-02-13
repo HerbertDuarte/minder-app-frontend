@@ -47,7 +47,7 @@ export function NoteCard({ data }: IProps) {
       const newNotes = notes.filter((item) => item.id !== data.id);
       setOpenNote(false);
       setNotes([...newNotes]);
-      toast.success("Nota editada com sucesso");
+      toast.success("Nota deletada com sucesso");
     } catch (error) {}
   }
 
@@ -105,6 +105,7 @@ export function NoteCard({ data }: IProps) {
             {edtiting ? (
               <div className="size-full">
                 <textarea
+                  autoFocus
                   className="size-full bg-transparent outline-none text-gray-700"
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
@@ -128,7 +129,7 @@ export function NoteCard({ data }: IProps) {
                 locale: ptBR,
               })}
           </p>
-          <p className="text-gray-500 max-h-[168px] text-ellipsis overflow-hidden">
+          <p className="text-gray-500  text-sm max-h-[168px] text-ellipsis overflow-hidden">
             {data.content}
           </p>
         </button>
