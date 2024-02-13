@@ -136,7 +136,7 @@ export default function App() {
           </label>
         </form>
       </Dialog>
-      <main className="px-12 py-8 grid grid-cols-3 auto-rows-[250px] w-full gap-5">
+      <main className="px-12 py-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 auto-rows-[250px] w-full gap-5">
         <button
           className="flex flex-col text-start h-full p-6 gap-4 bg-gray-200 rounded-md outline-none hover:ring-2 hover:ring-gray-200 focus-visible:ring-2 focus-visible:ring-violet-500/60"
           onClick={() => setCreateNoteDialog(true)}
