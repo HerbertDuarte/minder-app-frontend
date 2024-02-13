@@ -2,6 +2,53 @@
 @tailwind components;
 @tailwind utilities;
 
-main{
+main {
   width: 100%;
+  min-height: calc(100vh - 4rem);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 1rem;
+}
+
+main.grid {
+  display: grid;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  cursor: pointer;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: white;
+  box-shadow: none;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgb(125, 92, 243);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(111, 80, 226);
+}
+
+textarea::-webkit-scrollbar {
+  width: 5px;
+  cursor: pointer;
+}
+
+/* Track */
+textarea::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+
+/* Handle */
+textarea::-webkit-scrollbar-thumb {
+  background: rgb(91, 53, 230);
+  border-radius: 10px;
 }
