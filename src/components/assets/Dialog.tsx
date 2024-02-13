@@ -81,7 +81,7 @@ export default function Dialog({
     <div
       className={`transition-colors z-40 ${
         value ? "bg-black/50 pointer-events-auto" : "pointer-events-none"
-      } w-screen h-screen fixed flex justify-center items-center top-0 left-0 right-0 bottom-0 `}
+      } w-full h-screen fixed flex justify-center items-center top-0 left-0 right-0 bottom-0 `}
     >
       <div
         ref={contentRef}

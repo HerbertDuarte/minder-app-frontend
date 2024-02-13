@@ -15,7 +15,6 @@ export default function App() {
   const [recording, setRecording] = useState(false);
   const [content, setContent] = useState("");
 
-
   async function handleSubmit() {
     if (content === "") {
       toast.error("O conteúdo da nota não pode ser vazio");
@@ -49,8 +48,8 @@ export default function App() {
       window.SpeechRecognition || window.webkitSpeechRecognition;
 
     speechRecognition = new SpeechRecognitionAPI();
-    
-    speechRecognition.continuous = true
+
+    speechRecognition.continuous = true;
     speechRecognition.lang = "pt-BR";
     speechRecognition.maxAlternatives = 1;
     speechRecognition.interimResults = true;
@@ -59,9 +58,9 @@ export default function App() {
       const transcription = Array.from(event.results).reduce((text, result) => {
         return text.concat(result[0].transcript);
       }, "");
-      if(content === ""){
-      setContent(transcription);
-      }else{
+      if (content === "") {
+        setContent(transcription);
+      } else {
         setContent(content + " " + transcription);
       }
     };
@@ -93,13 +92,12 @@ export default function App() {
   return (
     <>
       <Dialog maxWidth="xl" model={[createNoteDialog, setCreateNoteDialog]}>
-        <form className="bg-gray-100 p-6 flex flex-col rounded-md ">
-          <div className="flex justify-between items-center">
-            <h2 className="pb-4 font-medium text-gray-500 text-xl flex gap-2">
-              <Newspaper />
-              Crie uma nota
-            </h2>
-
+        <form className="bg-gray-100 md:p-6 flex flex-col rounded-md ">
+          <h2 className="font-medium text-gray-500 text-xl flex gap-2">
+            <Newspaper />
+            Crie uma nota
+          </h2>
+          <div className="flex justify-end items-center">
             <div className="space-x-1">
               {recording ? (
                 <Button
@@ -129,14 +127,14 @@ export default function App() {
             <textarea
               autoFocus
               placeholder="Digite o conteúdo aqui ou clique no microfone para gravar a nota via áudio."
-              className="outline-none bg-gray-200/60 rounded p-6 text-gray-700 text-sm resize-none h-64 w-full placeholder:text-gray-400"
+              className="outline-none bg-gray-200/60 rounded p-3 md:p-6 text-gray-700 text-sm resize-none h-64 w-full placeholder:text-gray-400"
               value={content}
               onChange={(e) => setContent(e.target.value)}
             />
           </label>
         </form>
       </Dialog>
-      <main className="px-12 py-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 auto-rows-[250px] w-full gap-5">
+      <main className="p-4 md:px-12 md:py-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 auto-rows-[250px] w-full gap-5">
         <button
           className="flex flex-col text-start h-full p-6 gap-4 bg-gray-200 rounded-md outline-none hover:ring-2 hover:ring-gray-200 focus-visible:ring-2 focus-visible:ring-violet-500/60"
           onClick={() => setCreateNoteDialog(true)}

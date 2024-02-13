@@ -21,7 +21,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           className={`flex justify-center items-center gap-2 bg-gray-100 border  p-2 rounded-md text-violet-500`}
           href={"/profile"}
         >
-          <UserIcon className="shadow shadow-gray-300 rounded-full size-7 p-1" />
+          <UserIcon className="rounded-full size-7 p-1" />
           <p className="text-gray-600">{user?.name}</p>
         </Link>
       </header>

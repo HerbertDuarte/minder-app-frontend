@@ -6,7 +6,6 @@ import { EyeIcon, EyeOffIcon, UserIcon, UserPlus } from "lucide-react";
 import { useAuth } from "@/contexts/authContext/AuthContext";
 import { toast } from "sonner";
 import { useAxios } from "@/hooks/useAxios";
-import Loader from "../assets/Loader";
 interface IError {
   response?: {
     data?: {
@@ -116,7 +115,11 @@ export default function FormLogin() {
     return re.test(email);
   }
   return loading ? (
-    <Loader />
+    <>
+      <div className="flex-col gap-4 w-full flex items-center justify-center">
+        <div className="w-14 h-14 border-8 text-priborder-t-primary-dark animate-spin border-gray-200 flex items-center justify-center border-t-violet-500 rounded-full" />
+      </div>
+    </>
   ) : signing ? (
     <form
       onSubmit={handleSubmit}
