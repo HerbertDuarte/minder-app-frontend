@@ -125,7 +125,6 @@ export default function App() {
           </div>
           <label className="space-y-1 py-2">
             <textarea
-              autoFocus
               placeholder="Digite o conteúdo aqui ou clique no microfone para gravar a nota via áudio."
               className="outline-none bg-gray-200/60 rounded p-3 md:p-6 text-gray-700 text-sm resize-none h-64 w-full placeholder:text-gray-400"
               value={content}
