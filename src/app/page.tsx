@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { NoteCard } from "@/components/notes/NoteCard";
 import { INote, useAuth } from "@/contexts/authContext/AuthContext";
 import Button from "@/components/assets/Button";
+import Loader from "@/components/assets/Loader";
 let speechRecognition: SpeechRecognition;
 export default function App() {
   const { api } = useAxios();
@@ -14,23 +15,26 @@ export default function App() {
   const [createNoteDialog, setCreateNoteDialog] = useState(false);
   const [recording, setRecording] = useState(false);
   const [content, setContent] = useState("");
+  const [loading, setLoading] = useState(false);
 
   async function handleSubmit() {
     if (content === "") {
-      toast.error("O conteúdo da nota não pode ser vazio");
+      toast.error("O conteúdo da nota não pode ser vazio!");
       return;
     }
+    setLoading(true);
     try {
       const { data: newNote }: { data: INote } = await api.post("/note", {
         content,
       });
       setNotes([newNote, ...notes]);
       setCreateNoteDialog(false);
-      toast.success("Nota criada com sucesso");
+      toast.success("Nota criada com sucesso!");
       setContent("");
     } catch (error) {
-      toast.error("Erro ao criar a nota");
+      toast.error("Erro ao criar a nota!");
     }
+    setLoading(false);
   }
 
   function handleStartRecord() {
@@ -92,46 +96,56 @@ export default function App() {
   return (
     <>
       <Dialog maxWidth="xl" model={[createNoteDialog, setCreateNoteDialog]}>
-        <form className="bg-gray-100 md:p-6 flex flex-col rounded-md ">
-          <h2 className="font-medium text-gray-500 text-xl flex gap-2">
-            <Newspaper />
-            Crie uma nota
-          </h2>
-          <div className="flex justify-end items-center">
-            <div className="space-x-1">
-              {recording ? (
+        {loading ? (
+          <div className="py-24">
+          <Loader />
+          </div>
+        ) : (
+          <form className="bg-gray-100 md:p-6 flex flex-col rounded-md ">
+            <h2 className="font-medium text-gray-500 text-xl flex gap-2">
+              <Newspaper />
+              Crie uma nota
+            </h2>
+            <div className="flex justify-end items-center">
+              <div className="space-x-1">
+                {recording ? (
+                  <Button
+                    action={() => handleStopRecord()}
+                    submit
+                    theme="outline-red"
+                  >
+                    <div className="p-1">
+                      <div className="size-4 rounded-full bg-red-500 animate-pulse" />
+                    </div>
+                  </Button>
+                ) : (
+                  <Button
+                    action={() => handleStartRecord()}
+                    submit
+                    theme="outline-blue"
+                  >
+                    <MicIcon />
+                  </Button>
+                )}
                 <Button
-                  action={() => handleStopRecord()}
-                  submit
-                  theme="outline-red"
-                >
-                  <div className="p-1">
-                    <div className="size-4 rounded-full bg-red-500 animate-pulse" />
-                  </div>
-                </Button>
-              ) : (
-                <Button
-                  action={() => handleStartRecord()}
+                  action={() => handleSubmit()}
                   submit
                   theme="outline-blue"
                 >
-                  <MicIcon />
+                  <Save />
                 </Button>
-              )}
-              <Button action={() => handleSubmit()} submit theme="outline-blue">
-                <Save />
-              </Button>
+              </div>
             </div>
-          </div>
-          <label className="space-y-1 py-2">
-            <textarea
-              placeholder="Digite o conteúdo aqui ou clique no microfone para gravar a nota via áudio."
-              className="outline-none bg-gray-200/60 rounded p-3 md:p-6 text-gray-700 text-sm resize-none h-64 w-full placeholder:text-gray-400"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-            />
-          </label>
-        </form>
+            <label className="space-y-1 py-2">
+              <textarea
+                placeholder="Digite o conteúdo aqui ou clique no microfone para gravar a nota via áudio."
+                className="outline-none bg-gray-200/60 rounded p-3 md:p-6 text-gray-700 text-sm resize-none h-64 w-full placeholder:text-gray-400"
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+              />
+            </label>
+          </form>
+        )}
       </Dialog>
       <main className="p-4 md:px-12 md:py-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 auto-rows-[250px] w-full gap-5">
         <button

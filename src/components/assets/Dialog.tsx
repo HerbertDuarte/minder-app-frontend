@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { TouchEvent, UIEvent, WheelEvent, useEffect, useRef } from "react";
 
 interface Props {
   model: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
@@ -13,8 +13,31 @@ export default function Dialog({
   persistent,
   maxWidth,
 }: Props) {
+  const handleModalScroll = (event: UIEvent<HTMLDivElement>) => {
+    event.stopPropagation();
+  };
+
+  const handleWheel = (event: WheelEvent<HTMLDivElement>) => {
+    if (
+      modalRef.current &&
+      modalRef.current.contains(event.target as Node)
+    ) {
+      event.stopPropagation();
+    }
+  };
+
+  const handleTouchMove = (event: TouchEvent<HTMLDivElement>) => {
+    if (
+      modalRef.current &&
+      modalRef.current.contains(event.target as Node)
+    ) {
+      event.stopPropagation();
+    }
+  };
   const [value, setValue] = model;
   const contentRef = useRef<HTMLDivElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
+
 
   let maxWidthClass;
 
@@ -79,11 +102,15 @@ export default function Dialog({
 
   return (
     <div
+      onScroll={handleModalScroll}
+      onWheel={handleWheel}
+      ref={modalRef}
       className={`transition-colors z-40 ${
         value ? "bg-black/50 pointer-events-auto" : "pointer-events-none"
-      } w-full h-screen fixed flex justify-center items-center top-0 left-0 right-0 bottom-0 `}
+      } w-full h-screen fixed flex justify-center items-center inset-0 `}
     >
       <div
+        onTouchMove={handleTouchMove}
         ref={contentRef}
         className={`relative transition-all duration-200 scale-0 overflow-hidden ${
           value && "scale-100"

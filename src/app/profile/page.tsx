@@ -54,7 +54,7 @@ export default function Profile() {
                 <Edit2Icon size={20} strokeWidth={3} />
               </span> */}
               </h1>
-              <p className="md:text-lg text-md text-gray-500">{user.email}</p>
+              <p className="md:text-lg text-md text-violet-700/60">{user.email}</p>
             </div>
           </div>
           <div className="h-px w-full bg-gray-200 my-7" />

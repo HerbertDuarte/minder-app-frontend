@@ -23,14 +23,22 @@ export default function RouterProvider({
       if (dataToken && dataUser && dataUser.id) {
         await getUserData(dataUser.id, dataToken);
       }
-      setLoading(false)
+      setLoading(false);
     }
     handle();
   }, []);
 
   return (
     <>
-      {loading ? <Loader /> : user ?<Layout>{children}</Layout> :  <Login /> }
+      {loading ? (
+        <main>
+          <Loader />
+        </main>
+      ) : user ? (
+        <Layout>{children}</Layout>
+      ) : (
+        <Login />
+      )}
     </>
   );
 }

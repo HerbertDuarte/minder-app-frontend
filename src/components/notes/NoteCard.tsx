@@ -7,6 +7,7 @@ import { Edit2Icon, SaveAllIcon, TrashIcon, XIcon } from "lucide-react";
 import Button from "../assets/Button";
 import { useAxios } from "@/hooks/useAxios";
 import { toast } from "sonner";
+import Loader from "../assets/Loader";
 interface IProps {
   data: INote;
 }
@@ -17,6 +18,7 @@ export function NoteCard({ data }: IProps) {
   const [openNote, setOpenNote] = useState(false);
   const [edtiting, setEditing] = useState(false);
   const [content, setContent] = useState("");
+  const [loading, setLoading] = useState(false);
 
   function openModal() {
     setContent(data.content);
@@ -25,98 +27,115 @@ export function NoteCard({ data }: IProps) {
   }
 
   async function handleSaveEdit() {
-    console.log("bateu");
+    setLoading(true);
     try {
       const { data: editedNote }: { data: INote } = await api.put(
         "/note/" + data.id,
         { content }
       );
       const newNotes = notes.filter((item) => item.id !== data.id);
-      console.log(newNotes);
       setNotes([editedNote, ...newNotes]);
       setOpenNote(false);
-      toast.success("Nota editada com sucesso");
+      toast.success("Nota editada com sucesso!");
     } catch (error) {
-      toast.error("Erro ao editar a nota");
+      toast.error("Erro ao editar a nota1");
     }
+    setLoading(false);
   }
 
   async function handleDelete() {
     try {
+      setLoading(true);
       await api.delete("/note/" + data.id);
       const newNotes = notes.filter((item) => item.id !== data.id);
       setOpenNote(false);
       setNotes([...newNotes]);
-      toast.success("Nota deletada com sucesso");
-    } catch (error) {}
+      toast.success("Nota deletada com sucesso!");
+    } catch (error) {
+      toast.error("Erro ao deletar a nota!");
+    }
+    setLoading(false);
   }
 
   return (
     data && (
       <>
         <Dialog maxWidth="xl" model={[openNote, setOpenNote]}>
-          <div className="text-gray-700">
-            <div className="space-x-2 flex justify-between px-3">
-              {edtiting ? (
-                <p className="text-gray-400 text-sm font-medium">Editando...</p>
-              ) : (
-                <p className="text-gray-400 text-sm font-medium">
-                  {data.createdAt &&
-                    formatDistanceToNow(data.createdAt, {
-                      addSuffix: true,
-                      locale: ptBR,
-                    })}
-                </p>
-              )}
-              <div className="space-x-1">
-                {!edtiting && (
-                  <>
-                    <Button action={() => handleDelete()} theme="outline-red">
-                      <TrashIcon size={18} />
-                    </Button>
-                    <Button
-                      action={() => setEditing(true)}
-                      theme="outline-blue"
-                    >
-                      <Edit2Icon size={18} />
-                    </Button>
-                  </>
-                )}
-                {edtiting && (
-                  <>
-                    <Button
-                      action={() => setEditing(false)}
-                      theme="outline-red"
-                    >
-                      <XIcon size={18} />
-                    </Button>
-                    <Button
-                      action={() => handleSaveEdit()}
-                      theme="outline-blue"
-                    >
-                      <SaveAllIcon size={18} />
-                    </Button>
-                  </>
-                )}
-              </div>
+          {loading ? (
+            <div className="py-24">
+              <Loader />
             </div>
-          </div>
-          <div className="p-6 space-y-2 h-[55vh]">
-            {edtiting ? (
-              <div className="size-full">
-                <textarea
-                  autoFocus
-                  className="size-full bg-transparent outline-none text-gray-700"
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                />
+          ) : (
+            <>
+              <div className="text-gray-700">
+                <div className="space-x-2 flex justify-between px-3">
+                  {edtiting ? (
+                    <p className="text-gray-400 text-sm font-medium">
+                      Editando...
+                    </p>
+                  ) : (
+                    <p className="text-gray-400 text-sm font-medium">
+                      {data.createdAt &&
+                        formatDistanceToNow(data.createdAt, {
+                          addSuffix: true,
+                          locale: ptBR,
+                        })}
+                    </p>
+                  )}
+                  <div className="space-x-1">
+                    {!edtiting && (
+                      <>
+                        <Button
+                          action={() => handleDelete()}
+                          theme="outline-red"
+                        >
+                          <TrashIcon size={18} />
+                        </Button>
+                        <Button
+                          action={() => setEditing(true)}
+                          theme="outline-blue"
+                        >
+                          <Edit2Icon size={18} />
+                        </Button>
+                      </>
+                    )}
+                    {edtiting && (
+                      <>
+                        <Button
+                          action={() => setEditing(false)}
+                          theme="outline-red"
+                        >
+                          <XIcon size={18} />
+                        </Button>
+                        <Button
+                          action={() => handleSaveEdit()}
+                          theme="outline-blue"
+                        >
+                          <SaveAllIcon size={18} />
+                        </Button>
+                      </>
+                    )}
+                  </div>
+                </div>
               </div>
-            ) : (
-              <>
-                <p className="text-gray-500 h-full">{data.content}</p>
-              </>
-            )}
-          </div>
+              <div className="px-1 py-3 md:p-6 space-y-2 h-[55vh] overflow-y-auto content-preview">
+                {edtiting ? (
+                  <div className="size-full">
+                    <textarea
+                      autoFocus
+                      className="size-full bg-transparent outline-none text-gray-700"
+                      value={content}
+                      onChange={(e) => setContent(e.target.value)}
+                    />
+                  </div>
+                ) : (
+                  <>
+                    <p className="text-gray-500 h-full">{data.content}</p>
+                  </>
+                )}
+              </div>
+            </>
+          )}
         </Dialog>
         <button
           onClick={openModal}

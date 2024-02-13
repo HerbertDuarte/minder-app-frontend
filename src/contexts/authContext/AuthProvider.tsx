@@ -1,6 +1,6 @@
 "use client";
 
-import { Dispatch, ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { useAxios } from "@/hooks/useAxios";
 import { AuthContext, INote } from "./AuthContext";
 import { useRouter } from "next/navigation";
@@ -49,10 +49,11 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   function logout() {
     setToken("");
     setUser(undefined);
+    setNotes([])
 
     localStorage.removeItem("user");
     localStorage.removeItem("token");
-    toast.success("Seção finalizada com sucesso");
+    toast.success("Seção finalizada com sucesso!");
     router.push("/");
   }
 

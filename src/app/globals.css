@@ -23,7 +23,7 @@ main.grid {
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: white;
+  background: transparent;
   box-shadow: none;
 }
 
@@ -36,19 +36,18 @@ main.grid {
   background: rgb(111, 80, 226);
 }
 
-textarea::-webkit-scrollbar {
+textarea::-webkit-scrollbar , .content-preview::-webkit-scrollbar{
   width: 5px;
   cursor: pointer;
 }
 
 /* Track */
-textarea::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px grey;
+textarea::-webkit-scrollbar-track, .content-preview::-webkit-scrollbar-track {
   border-radius: 10px;
 }
 
 /* Handle */
-textarea::-webkit-scrollbar-thumb {
+textarea::-webkit-scrollbar-thumb, .content-preview::-webkit-scrollbar-thumb {
   background: rgb(91, 53, 230);
   border-radius: 10px;
 }

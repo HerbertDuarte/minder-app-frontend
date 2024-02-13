@@ -6,6 +6,7 @@ import { EyeIcon, EyeOffIcon, UserIcon, UserPlus } from "lucide-react";
 import { useAuth } from "@/contexts/authContext/AuthContext";
 import { toast } from "sonner";
 import { useAxios } from "@/hooks/useAxios";
+import Loader from "../assets/Loader";
 interface IError {
   response?: {
     data?: {
@@ -71,39 +72,39 @@ export default function FormLogin() {
     const { name, confirmPassword, email, password } = form;
 
     if (name === "") {
-      toast.error("Por favor preencha o campo nome");
+      toast.error("Por favor preencha o campo nome!");
       return false;
     }
 
     if (email === "") {
-      toast.error("Por favor preencha o campo email");
+      toast.error("Por favor preencha o campo email!");
       return false;
     }
 
     if (!validarEmail(email)) {
-      toast.error("Por favor insira um email válido");
+      toast.error("Por favor insira um email válido!");
       return false;
     }
 
     if (password === "") {
-      toast.error("Por favor preencha o campo senha");
+      toast.error("Por favor preencha o campo senha!");
       return false;
     }
 
     if (confirmPassword === "") {
-      toast.error("Por favor preencha o campo confirmação de senha");
+      toast.error("Por favor preencha o campo confirmação de senha!");
       return false;
     }
 
     if (confirmPassword !== password) {
       toast.error(
-        "Confirmação de senha inválida. Verifique as senhas e tente novamente"
+        "Confirmação de senha inválida. Verifique as senhas e tente novamente!"
       );
       return false;
     }
 
     if (password.length < 6) {
-      toast.error("A senha precisa ter no mínimo 6 digitos");
+      toast.error("A senha precisa ter no mínimo 6 digitos!");
       return false;
     }
 
@@ -116,9 +117,7 @@ export default function FormLogin() {
   }
   return loading ? (
     <>
-      <div className="flex-col gap-4 w-full flex items-center justify-center">
-        <div className="w-14 h-14 border-8 text-priborder-t-primary-dark animate-spin border-gray-200 flex items-center justify-center border-t-violet-500 rounded-full" />
-      </div>
+      <Loader />
     </>
   ) : signing ? (
     <form
@@ -195,11 +194,11 @@ export default function FormLogin() {
         </span>
       </label>
 
-      <div className="flex w-full justify-end gap-3 mt-4">
-        <FormButton action={() => setSigning(false)} theme="700">
-          Cancelar
-        </FormButton>
-        <FormButton action={() => handleRegister()}>Registrar</FormButton>
+      <div className="flex w-full justify-between gap-3 mt-4">
+        <button className="text-gray-700 hover:text-violet-700 text-sm font-medium hover:underline p-3 pl-1" onClick={() => setSigning(false)} >
+         Fazer login
+        </button>
+        <FormButton theme="700" action={() => handleRegister()}>Registrar</FormButton>
       </div>
     </form>
   ) : (
@@ -242,11 +241,11 @@ export default function FormLogin() {
         </span>
       </label>
 
-      <div className="flex w-full justify-end gap-3 mt-4">
-        <FormButton action={() => setSigning(true)} theme="700">
-          Registrar
-        </FormButton>
-        <FormButton submit>Entrar</FormButton>
+      <div className="flex w-full justify-between gap-3 mt-4">
+        <button className="text-gray-700 hover:text-violet-700 text-sm font-medium hover:underline p-3 pl-1" onClick={() => setSigning(true)} >
+          Criar conta
+        </button>
+        <FormButton theme="700" submit>Entrar</FormButton>
       </div>
     </form>
   );
