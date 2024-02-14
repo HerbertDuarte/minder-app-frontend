@@ -195,10 +195,10 @@ export default function FormLogin() {
       </label>
 
       <div className="flex w-full justify-between gap-3 mt-4">
-        <button className="text-gray-700 hover:text-violet-700 text-sm font-medium hover:underline p-3 pl-1" onClick={() => setSigning(false)} >
+        <button type="button" className="text-gray-700 hover:text-violet-700 text-sm font-medium hover:underline p-3 pl-1" onClick={() => setSigning(false)} >
          Fazer login
         </button>
-        <FormButton theme="700" action={() => handleRegister()}>Registrar</FormButton>
+        <FormButton submit theme="700" action={() => handleRegister()}>Registrar</FormButton>
       </div>
     </form>
   ) : (
@@ -242,7 +242,7 @@ export default function FormLogin() {
       </label>
 
       <div className="flex w-full justify-between gap-3 mt-4">
-        <button className="text-gray-700 hover:text-violet-700 text-sm font-medium hover:underline p-3 pl-1" onClick={() => setSigning(true)} >
+        <button type="button" className="text-gray-700 hover:text-violet-700 text-sm font-medium hover:underline p-3 pl-1" onClick={() => setSigning(true)} >
           Criar conta
         </button>
         <FormButton theme="700">Entrar</FormButton>
