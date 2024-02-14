@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 import { AuthProvider } from "@/contexts/authContext/AuthProvider";
 import RouterProvider from "@/Router/RouterProvider";
 import { Toaster } from "sonner";
-const inter = Inter({ subsets: ["latin"] });
+const  inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   title: "minder app",
