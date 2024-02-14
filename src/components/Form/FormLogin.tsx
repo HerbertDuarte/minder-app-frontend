@@ -245,7 +245,7 @@ export default function FormLogin() {
         <button type="button" className="text-gray-700 hover:text-violet-700 text-sm font-medium hover:underline p-3 pl-1" onClick={() => setSigning(true)} >
           Criar conta
         </button>
-        <FormButton theme="700">Entrar</FormButton>
+        <FormButton submit theme="700">Entrar</FormButton>
       </div>
     </form>
   );
