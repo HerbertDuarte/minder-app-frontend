@@ -198,7 +198,7 @@ export default function FormLogin() {
         <button type="button" className="text-gray-700 hover:text-violet-700 text-sm font-medium hover:underline p-3 pl-1" onClick={() => setSigning(false)} >
          Fazer login
         </button>
-        <FormButton submit theme="700" action={() => handleRegister()}>Registrar</FormButton>
+        <FormButton theme="700" action={() => handleRegister()}>Registrar</FormButton>
       </div>
     </form>
   ) : (
