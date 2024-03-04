@@ -16,7 +16,7 @@ interface IError {
 }
 export default function FormLogin() {
   const { api } = useAxios();
-  const { login } = useAuth();
+  const { login, isLoading } = useAuth();
   const [seePassword, setSeePassword] = useState(false);
   const [seeConfPassword, setSeeConfPassword] = useState(false);
   const [signing, setSigning] = useState<boolean>(false);
@@ -115,8 +115,8 @@ export default function FormLogin() {
     var re = /\S+@\S+\.\S+/;
     return re.test(email);
   }
-  return loading ? (
-    <Loader />
+  return isLoading ? (
+    <Loader compact/>
   ) : signing ? (
     <form
       onSubmit={handleSubmit}
