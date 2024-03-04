@@ -14,6 +14,7 @@ interface AuthContextProps {
   notes: INote[];
   setNotes: Dispatch<INote[]>;
   getUserData: (id: string, token: string) => Promise<boolean>;
+  isLoading : boolean
 }
 
 const AuthContext = createContext({} as AuthContextProps);

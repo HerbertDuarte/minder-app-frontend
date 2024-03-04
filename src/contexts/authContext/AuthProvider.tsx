@@ -12,6 +12,8 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<any>();
   const [token, setToken] = useState<string>("");
   const [notes, setNotes] = useState<INote[]>([]);
+  const [isLoading, setLoading] = useState<boolean>(false);
+
   const router = useRouter();
   /* MODAIS */
   const modelError = useState<boolean>(false);
@@ -21,6 +23,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   /* LOGIN */
   async function login(data: { email: string; password: string }) {
     setErrorNotify(false);
+    setLoading(true);
 
     try {
       const { email, password } = data;
@@ -37,16 +40,21 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (error?.response?.status === 401) {
         toast.error(error.response.data.message);
       } else {
-        toast.error("Ops! Houve um erro inesperado, tente novamente mais tarde!");
+        toast.error(
+          "Ops! Houve um erro inesperado, tente novamente mais tarde!"
+        );
         console.log(error);
       }
       console.error(error?.response);
     }
+    setLoading(false);
     return;
   }
 
   /* LOGOUT */
   function logout() {
+    setLoading(true);
+
     setToken("");
     setUser(undefined);
     setNotes([])
@@ -55,20 +63,27 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.removeItem("token");
     toast.success("Seção finalizada com sucesso!");
     router.push("/");
+    setLoading(false);
   }
 
   async function getUserData(id: string, token: string) {
+    setLoading(true);
+
     try {
       const api = updateToken(token);
       const { data: user } = await api.get("/user/" + id);
       const { data: notes } = await api.get("/note");
-      setUser(user)
+      setUser(user);
       setToken(token);
       setNotes(notes);
-      return true
+      setLoading(false);
+
+      return true;
     } catch (error) {
-      logout()
-      return false
+      logout();
+      setLoading(false);
+
+      return false;
     }
   }
 
@@ -99,6 +114,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         notes,
         setNotes,
         getUserData,
+        isLoading,
       }}
     >
       {children}
